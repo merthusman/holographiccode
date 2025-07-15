@@ -86,3 +86,5 @@ The script will produce a window with three panels:
 The primary result and the successful proof of the concept is the perfect, bit-for-bit identity between the top-right and bottom-right graphs. This demonstrates that in this model, observing the whole and observing the part reveal the exact same fundamental information.
 
 This project is a conceptual exploration into the axiomatic foundations of physics, proposing a non-arbitrary, holographic, and deterministic model for reality.
+
+contact: husmanmert@gmail.com
