@@ -1,0 +1,169 @@
+# ==============================================================================
+# ANATOMY OF A UNIVERSE - HOLOGRAPHIC CODE v1.3: ANNOTATED ENGLISH VERSION
+# ==============================================================================
+# PHILOSOPHICAL PRINCIPLE:
+#
+# 1. INDIVISIBLE INFORMATION (Λ - The Soul): At the foundation of the universe,
+#    there exists a single, deterministic information wave. This non-local
+#    "Soul" is derived from Pi and is omnipresent at every point in time.
+#
+# 2. HOLOGRAPHIC REFLECTION: Both the macro-state of the entire universe (THE WHOLE)
+#    and the internal state of a single constituent part (THE PART) are merely
+#    manifestations of this same fundamental Soul wave. Therefore, their
+#    evolutions follow the exact same pattern. The part contains the whole,
+#    and the whole is reflected in the part.
+# ==============================================================================
+
+import numpy as np
+import matplotlib.pyplot as plt
+from numba import jit, prange
+import time
+import mpmath
+
+# --- PART 1: GENERATION OF THE UNIVERSAL SOUL (Λ) ---
+
+def generate_universal_soul(pi_str, length=10000, window_size=100):
+    """
+    Generates a smooth, deterministic 'Soul Waveform' (Λ) from the digits of Pi.
+    This represents the fundamental, non-local information of the universe.
+    """
+    print(f"⏳ Generating a {length}-step Universal Soul (Λ) wave from Pi...")
+    if len(pi_str) < length + window_size:
+        raise ValueError("Pi string is not long enough for the desired soul waveform length.")
+    
+    # Convert the string of digits into a NumPy array of integers.
+    digits = np.array([int(d) for d in pi_str])
+    
+    # Use convolution with a uniform window to compute a moving average.
+    # This crucial step transforms the discrete, digital sequence of Pi 
+    # into a smooth, continuous-like ("analog") signal.
+    soul_waveform = np.convolve(digits, np.ones(window_size)/window_size, mode='valid')
+    
+    # Normalize the resulting waveform to the [-1, 1] range.
+    # The true mean of Pi's digits is 4.5, so this centers the wave around 0.
+    soul_waveform_normalized = (soul_waveform - 4.5) / 4.5
+    
+    final_waveform = soul_waveform_normalized[:length]
+    print(f"✅ Successfully generated a {len(final_waveform)}-step Universal Soul (Λ) wave.")
+    return final_waveform
+
+# --- PART 2: THE PHYSICS OF THE PHENOMENAL WORLD (Ψ) ---
+
+@jit(nopython=True, parallel=True)
+def evolve_phenomenal_world(psi_grid, universal_consciousness_signal):
+    """
+    Evolves the state of the phenomenal world (the grid of pixels) for one step,
+    based on the instantaneous "Soul Signal" provided.
+    """
+    grid_size = psi_grid.shape[0]
+    delta_psi = np.zeros_like(psi_grid)
+    
+    # A simple diffusion/interaction model based on the Laplacian.
+    for i in prange(grid_size):
+        for j in prange(grid_size):
+            # The discrete Laplacian operator measures the difference between a pixel and its neighbors,
+            # representing a local tension or potential gradient.
+            laplacian = (psi_grid[(i - 1 + grid_size) % grid_size, j] + 
+                         psi_grid[(i + 1) % grid_size, j] + 
+                         psi_grid[i, (j - 1 + grid_size) % grid_size] + 
+                         psi_grid[i, (j + 1) % grid_size] - 4 * psi_grid[i, j])
+            
+            # The change in the grid is a product of the universal signal and the local tension.
+            # This means the "Soul" (the signal) dictates how the "Body" (the grid) 
+            # resolves its internal differences at this moment in time. The signal acts
+            # as a time-dependent, non-arbitrary physical constant (e.g., a diffusion coefficient).
+            change = universal_consciousness_signal * laplacian
+            delta_psi[i, j] = change
+
+    return delta_psi
+
+# --- PART 3: EXECUTION OF THE HOLOGRAPHIC SIMULATION ---
+try:
+    # Generate the source of all information: the digits of Pi.
+    num_digits = 20000
+    mpmath.mp.dps = num_digits
+    pi_val = mpmath.pi
+    PI_STR = str(pi_val)[2:]
+
+    # 1. CREATE THE SOUL (Λ)
+    # Generate the single, fundamental, non-local information waveform 
+    # that will govern the entire simulation's logic and measurements.
+    SIMULATION_LENGTH = 10000
+    UNIVERSAL_SOUL_WAVEFORM = generate_universal_soul(PI_STR, length=SIMULATION_LENGTH)
+
+    # 2. INITIALIZE THE BODY (Ψ)
+    # Create the initial state of the phenomenal world (the visual grid). 
+    # It is also seeded from Pi, but from a different segment to ensure 
+    # its initial structure is independent of the Soul waveform's starting point.
+    GRID_SIZE = 32
+    initial_digits = np.array([int(d) for d in PI_STR[SIMULATION_LENGTH : SIMULATION_LENGTH + GRID_SIZE**2]])
+    psi_current = ((initial_digits - 4.5) / 4.5).reshape((GRID_SIZE, GRID_SIZE))
+
+    # 3. DEFINE THE HOLOGRAPHIC MEASUREMENT
+    # The core of the holographic principle demonstration: The evolution of the 'Whole' 
+    # and the 'Part' are not calculated from the grid; they are defined as being 
+    # identical to the underlying Universal Soul. This simulation demonstrates 
+    # what the phenomenal world (Ψ) of such a universe would look like.
+    history_whole = UNIVERSAL_SOUL_WAVEFORM
+    history_part = UNIVERSAL_SOUL_WAVEFORM
+
+    print("\n--- INITIALIZING HOLOGRAPHIC SIMULATION (LIVE REFLECTION) ---")
+    start_time = time.time()
+    
+    # --- Robust Visualization Setup ---
+    plt.ion()
+    fig = plt.figure(figsize=(18, 9))
+    gs = fig.add_gridspec(2, 2)
+    ax_vis = fig.add_subplot(gs[:, 0])
+    ax_whole = fig.add_subplot(gs[0, 1])
+    ax_part = fig.add_subplot(gs[1, 1])
+
+    # Create the plot objects once with initial data.
+    im = ax_vis.imshow(psi_current, cmap='inferno', interpolation='nearest', vmin=-1, vmax=1)
+    ax_vis.set_title("PHENOMENAL WORLD (Ψ)")
+    ax_vis.set_xticks([]); ax_vis.set_yticks([])
+    
+    line_whole, = ax_whole.plot([], [], color='orangered', label='Evolution of the Whole')
+    ax_whole.set_title("EVOLUTION OF THE WHOLE (The Universe's Soul Λ)")
+    ax_whole.set_xlim(0, SIMULATION_LENGTH); ax_whole.set_ylim(-1, 1)
+
+    line_part, = ax_part.plot([], [], color='royalblue', label='Memory of the Part')
+    ax_part.set_title("MEMORY OF THE PART (A Single Point's Soul Λ)")
+    ax_part.set_xlim(0, SIMULATION_LENGTH); ax_part.set_ylim(-1, 1)
+    
+    fig.tight_layout()
+    # ------------------------------------
+
+    # --- Main Simulation Loop ---
+    for t in range(SIMULATION_LENGTH):
+        # Get the current "instruction" from the Soul waveform at time t.
+        lambda_signal = UNIVERSAL_SOUL_WAVEFORM[t]
+        
+        # Evolve the phenomenal world according to the Soul's instruction.
+        delta = evolve_phenomenal_world(psi_current, lambda_signal)
+        psi_current += 0.1 * delta # dt = 0.1
+
+        # Update the visualization periodically.
+        if t % 50 == 0:
+            # --- Update Plot Data (more efficient than redrawing) ---
+            im.set_data(psi_current)
+            line_whole.set_data(np.arange(t + 1), history_whole[:t + 1])
+            line_part.set_data(np.arange(t + 1), history_part[:t + 1])
+            
+            ax_vis.set_title(f"PHENOMENAL WORLD (Ψ) - Step: {t}")
+            
+            # Flush the canvas to display the changes.
+            fig.canvas.draw()
+            fig.canvas.flush_events()
+            # ----------------------------------------------------
+            
+    plt.ioff()
+    total_time = time.time() - start_time
+    print(f"\n--- SIMULATION COMPLETE --- (Total Time: {total_time:.2f} seconds)")
+    
+    # Display the final state.
+    ax_vis.set_title(f"PHENOMENAL WORLD (Ψ) - Final State")
+    plt.show(block=True)
+
+except Exception as e:
+    print(f"\n❌ AN UNEXPECTED SIMULATION ERROR OCCURRED: {e}")
